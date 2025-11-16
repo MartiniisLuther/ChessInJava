@@ -38,6 +38,12 @@ ChessInJava/
 └─ build/               # Eclipse build output (ignored)
 ```
 
+## Game Preview
+
+![Initial game setup](assets/screenshots/game_setup.png)
+
+_Initial board setup with pieces in their standard starting positions._
+
 ## Learning Goals
 - Practice Java OOP: inheritance, polymorphism, encapsulation  
 - Implement data structures: arrays, lists, stacks  

@@ -14,3 +14,6 @@ Thumbs.db
 # Optional: IntelliJ files if opened there
 *.iml
 .idea/
+
+#ignore these additional pieces
+assets/more_pieces/
