@@ -39,7 +39,7 @@ public final class Position {
     }
 
     /** @return the column index */
-    public int getColumn() {
+    public int getCol() {
         return col;
     }
 

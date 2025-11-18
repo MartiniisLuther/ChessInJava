@@ -36,7 +36,7 @@ public class ChessGUI {
 	/**
 	 * Sets up displays the main game window.
 	 * Adds the chessboard panel to the JFrame.
-	 */
+	*/
 	private void createAndShowGUI() {
 		JFrame frame = new JFrame("Chess in Java");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
