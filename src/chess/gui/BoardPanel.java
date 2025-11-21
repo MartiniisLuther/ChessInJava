@@ -1,5 +1,9 @@
 package chess.gui;
 
+import chess.core.ChessBoard;
+import chess.core.Piece;
+import chess.core.Position;
+import chess.gui.ChessGUI;
 import java.awt.*;
 import javax.swing.*;
 
@@ -26,13 +30,14 @@ public class BoardPanel extends JPanel {
     // 2D array to hold TilePanels
     private TilePanel[][] tiles = new TilePanel[ROWS][COLS];
 
+    public static final ChessBoard modelBoard = ChessGUI.modelBoard;
+
     /**
      * Constructor to build the 8x8 grid.
     */
     public BoardPanel() {
         setLayout(new GridLayout(ROWS, COLS));
         initializeBoard(); //
-        loadStartingPieces();
     }
 
     /**
@@ -48,46 +53,23 @@ public class BoardPanel extends JPanel {
                     : new Color(181, 136, 99);
                 
                 //
-                TilePanel tile = new TilePanel(tileColor);
+                TilePanel tile = new TilePanel(tileColor, new chess.core.Position(row, col));
                 tiles[row][col] = tile; //store a reference
                 add(tile); // add to the gui
             }
         }
+        refreshBoard();
     }
 
-    /**
-     * Loads the starting pieces onto the board.
-     * This is a placeholder implementation; actual piece placement
-     * should be based on game logic.
-    */
-    private void loadStartingPieces() {
-        // Black pieces
-        tiles[0][0].setPieceIcon("black-rook.png");
-        tiles[0][1].setPieceIcon("black-knight.png");
-        tiles[0][2].setPieceIcon("black-bishop.png");
-        tiles[0][3].setPieceIcon("black-queen.png");
-        tiles[0][4].setPieceIcon("black-king.png");
-        tiles[0][5].setPieceIcon("black-bishop.png");
-        tiles[0][6].setPieceIcon("black-knight.png");
-        tiles[0][7].setPieceIcon("black-rook.png");
-
-        for (int col = 0; col < 8; col++) {
-            tiles[1][col].setPieceIcon("black-pawn.png");
-        }
-
-        // White pieces
-        tiles[7][0].setPieceIcon("white-rook.png");
-        tiles[7][1].setPieceIcon("white-knight.png");
-        tiles[7][2].setPieceIcon("white-bishop.png");
-        tiles[7][3].setPieceIcon("white-queen.png");
-        tiles[7][4].setPieceIcon("white-king.png");
-        tiles[7][5].setPieceIcon("white-bishop.png");
-        tiles[7][6].setPieceIcon("white-knight.png");
-        tiles[7][7].setPieceIcon("white-rook.png"); 
-
-        for (int col = 0; col < 8; col++) {
-            tiles[6][col].setPieceIcon("white-pawn.png");
+    //
+    public void refreshBoard() {
+        for (int row = 0; row < ROWS; row++) {
+            for (int col = 0; col < COLS; col++) {
+                Position pos = new Position(row, col);
+                Piece piece = modelBoard.getPiece(pos);
+                tiles[row][col].setPieceIcon(piece);
+                tiles[row][col].repaint();
+            }
         }
     }
-
 }

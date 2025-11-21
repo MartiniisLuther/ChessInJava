@@ -1,6 +1,11 @@
 package chess.gui;
 
+import chess.core.ChessBoard;
+import chess.core.Piece;
+import chess.core.Position;
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.*;
 
 /**
@@ -23,6 +28,11 @@ public class ChessGUI {
 	// Window dimensions
 	private static final int WINDOW_WIDTH = 1200;
 	private static final int WINDOW_HEIGHT = 800;
+
+	private static Position selectedTile = null;
+	private static Piece selectedPiece = null;
+	private static List<chess.core.Position> highlightedSquares = new ArrayList<>();
+	private static ChessBoard modelBoard = new ChessBoard();
 
 
 	// main method
@@ -58,5 +68,44 @@ public class ChessGUI {
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
 	}
+
+	/** Handle tile click: 
+	 * - select a piece or move selected piece if pos is a legal move; 
+	 * - updates selection/highlightedSquares
+	 * - and may call modelBoard.movePiece(...). 
+	 * 
+	 * @param pos clicked tile (non-null) 
+	 */
+	public static void handleTileClicked(Position pos) {
+		Piece piece = modelBoard.getPiece(pos);
+
+		if (selectedPiece == null) {
+			if (piece != null) {
+				selectedPiece = piece;
+				selectedTile = pos;
+				highlightedSquares = piece.getLegalMoves(modelBoard);
+			}
+		} else {
+			if (highlightedSquares.contains(pos)) {
+				modelBoard.movePiece(selectedTile, pos);
+			}
+			selectedPiece = null;
+			selectedTile = null;
+			highlightedSquares.clear();
+		}
+	}
+
+
+	/**
+	 * Checks whether a specific board position is currently highlighted in the GUI.
+	 * Queries the internal highlightedSquares collection to determine if the given position is marked.
+	 *
+	 * @param pos the board Position to check for highlighting
+	 * @return true if the specified position is highlighted, false otherwise
+	 */
+	public static boolean isHighlighted(Position pos) {
+		return highlightedSquares.contains(pos);
+	}
+
 
 }
