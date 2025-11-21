@@ -18,5 +18,10 @@ public class ModelTest {
 
         System.out.println("\nRook at a1 after clearing pawn:");
         rook.getLegalMoves(board).forEach(System.out::println);
+
+        // Sample Bishop test
+        Piece bishoPiece = board.getPiece(new Position(7, 2));
+        System.out.println("\nBishop at c1 legal moves:");
+        bishoPiece.getLegalMoves(board).forEach(System.out::println);
     }
 }
