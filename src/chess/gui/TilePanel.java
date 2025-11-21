@@ -1,5 +1,6 @@
 package chess.gui;
 
+import chess.core.Piece;
 import java.awt.*;
 import javax.swing.*;
 
@@ -18,9 +19,11 @@ import javax.swing.*;
 public class TilePanel extends JPanel {
     
     private JLabel pieceLabel;
+    private chess.core.Position tilePosition;
 
     // Constructor
-    public TilePanel(Color bgColor) {
+    public TilePanel(Color bgColor, chess.core.Position pos) {
+        this.tilePosition = pos;
         setBackground(bgColor);
         setLayout(new BorderLayout());
 
@@ -29,23 +32,54 @@ public class TilePanel extends JPanel {
         pieceLabel.setVerticalAlignment(SwingConstants.CENTER);
 
         add(pieceLabel, BorderLayout.CENTER);
+
+        // event listener
+        this.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mousePressed(java.awt.event.MouseEvent e) {
+                chess.gui.ChessGUI.handleTileClicked(tilePosition);
+            }
+        });
     }
 
     /** 
-     * Renders a chess piece from /assets.
-     * @param imageName The file path to the piece image.
+     * Renders a chess piece from /assets/assets
      */
-    public void setPieceIcon(String imageName) {
-        if (imageName == null) {
-            pieceLabel.setIcon(null);
+    public void setPieceIcon(Piece piece) {
+        this.removeAll();
+
+        if (piece == null) {
+            revalidate();
+            repaint();
             return;
         }
 
-        // Load image from resources
-        ImageIcon icon = new ImageIcon("assets/" + imageName);
-        // Scale image to fit tile
-        Image scaledImage = icon.getImage().getScaledInstance(64, 64, Image.SCALE_SMOOTH);
-        pieceLabel.setIcon(new ImageIcon(scaledImage)); 
-     }
+        // Load image path
+        String iconPath = "/assets/pieces" 
+            + piece.getColor().toString().toLowerCase() + "-"
+            + piece.getType().toString().toLowerCase() + ".png";
+
+        //
+        try {
+            ImageIcon icon = new ImageIcon(getClass().getResource(iconPath));
+            pieceLabel.setIcon(icon);
+            this.add(pieceLabel, BorderLayout.CENTER);
+        } catch (Exception e) {
+            System.out.println("Missing icon: " + iconPath);
+        }
+
+        revalidate();
+        repaint();
+    }
+
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+
+        if (chess.gui.ChessGUI.isHighlighted(tilePosition)) {
+            g.setColor(new Color(255, 255, 0, 120));
+            g.fillRect(0, 0, getWidth(), getHeight());
+        }
+    }
 
 }
