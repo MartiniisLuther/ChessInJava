@@ -1,6 +1,5 @@
 package chess.core;
 
-import java.awt.Color;
 
 /**
  * Represents the entire 8x8 chessboard and stores all piece position.
@@ -35,13 +34,10 @@ public class ChessBoard {
     public void setupStartingPosition() {
         clearBoard();
 
-        // -----------------------------
-        // Place black major pieces
-        // Row 0
-        // -----------------------------
+        // Place black major pieces : Row 0
         board[0][0] = new Rook(Color.BLACK, new Position(0, 0));
         board[0][1] = new Knight(Color.BLACK, new Position(0, 1));
-        board[0][2] = new Bishop(Color.BLACK, new Position(0, 3));
+        board[0][2] = new Bishop(Color.BLACK, new Position(0, 2));
         board[0][3] = new Queen(Color.BLACK, new Position(0, 3));
         board[0][4] = new King(Color.BLACK, new Position(0, 4));
         board[0][5] = new Bishop(Color.BLACK, new Position(0, 5));
@@ -53,10 +49,7 @@ public class ChessBoard {
             board[1][col] = new Pawn(Color.BLACK, new Position(1, col));
         }
 
-
-        // -------------------------------
-        // White major pieces
-        // Row 7
+        // White major pieces :  7
         board[7][0] = new Rook(Color.WHITE, new Position(7, 0));
         board[7][1] = new Knight(Color.WHITE, new Position(7, 1));
         board[7][2] = new Bishop(Color.WHITE, new Position(7, 2));

@@ -43,7 +43,7 @@ public class TilePanel extends JPanel {
     }
 
     /** 
-     * Renders a chess piece from /assets/assets
+     * Renders a chess piece from /assets/pieces
      */
     public void setPieceIcon(Piece piece) {
         this.removeAll();
@@ -55,13 +55,18 @@ public class TilePanel extends JPanel {
         }
 
         // Load image path
-        String iconPath = "/assets/pieces" 
-            + piece.getColor().toString().toLowerCase() + "-"
+        String iconPath = "/pieces/" 
+            + piece.getColor().toString().toLowerCase() + "_"
             + piece.getType().toString().toLowerCase() + ".png";
 
         //
         try {
-            ImageIcon icon = new ImageIcon(getClass().getResource(iconPath));
+            java.net.URL iconURL = getClass().getResource(iconPath);
+            if (iconURL == null) {
+                System.out.println("Missing icon: " + iconPath + " (resource not found)!");
+                return;
+            }
+            ImageIcon icon = new ImageIcon(iconURL);
             pieceLabel.setIcon(icon);
             this.add(pieceLabel, BorderLayout.CENTER);
         } catch (Exception e) {

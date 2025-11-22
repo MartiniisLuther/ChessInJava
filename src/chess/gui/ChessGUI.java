@@ -25,7 +25,7 @@ import javax.swing.*;
 
 public class ChessGUI {
 	
-	// Window dimensions
+	// Window dimensions 
 	private static final int WINDOW_WIDTH = 1200;
 	private static final int WINDOW_HEIGHT = 800;
 
@@ -33,6 +33,7 @@ public class ChessGUI {
 	private static Piece selectedPiece = null;
 	private static List<chess.core.Position> highlightedSquares = new ArrayList<>();
 	private static ChessBoard modelBoard = new ChessBoard();
+	private static BoardPanel boardPanelReference;
 
 
 	// main method
@@ -55,8 +56,8 @@ public class ChessGUI {
 		// frame.setBackground(new Color(0x111827)); // dark gray background
 		
 		// Create and add the chessboard panel
-		// BoardPanel boardPanel = new BoardPanel();
 		ChessBoardWithCoords boardWithCoords = new ChessBoardWithCoords();
+		boardPanelReference = boardWithCoords.getBoardPanel();
 		SidePanel sidePanel = new SidePanel();
 
 		// Layout setup
@@ -84,6 +85,9 @@ public class ChessGUI {
 				selectedPiece = piece;
 				selectedTile = pos;
 				highlightedSquares = piece.getLegalMoves(modelBoard);
+				if (boardPanelReference != null) {
+					boardPanelReference.refreshBoard();
+				}
 			}
 		} else {
 			if (highlightedSquares.contains(pos)) {
@@ -92,6 +96,9 @@ public class ChessGUI {
 			selectedPiece = null;
 			selectedTile = null;
 			highlightedSquares.clear();
+			if (boardPanelReference != null) {
+				boardPanelReference.refreshBoard();
+			}
 		}
 	}
 
@@ -105,6 +112,11 @@ public class ChessGUI {
 	 */
 	public static boolean isHighlighted(Position pos) {
 		return highlightedSquares.contains(pos);
+	}
+
+	// getter for ChessBoard modelBoard
+	public static ChessBoard getModalChessBoard() {
+		return modelBoard;
 	}
 
 

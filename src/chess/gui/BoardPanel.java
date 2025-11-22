@@ -3,7 +3,6 @@ package chess.gui;
 import chess.core.ChessBoard;
 import chess.core.Piece;
 import chess.core.Position;
-import chess.gui.ChessGUI;
 import java.awt.*;
 import javax.swing.*;
 
@@ -30,7 +29,7 @@ public class BoardPanel extends JPanel {
     // 2D array to hold TilePanels
     private TilePanel[][] tiles = new TilePanel[ROWS][COLS];
 
-    public static final ChessBoard modelBoard = ChessGUI.modelBoard;
+    public static final ChessBoard modelBoard = ChessGUI.getModalChessBoard();
 
     /**
      * Constructor to build the 8x8 grid.
@@ -53,7 +52,7 @@ public class BoardPanel extends JPanel {
                     : new Color(181, 136, 99);
                 
                 //
-                TilePanel tile = new TilePanel(tileColor, new chess.core.Position(row, col));
+                TilePanel tile = new TilePanel(tileColor, new Position(row, col));
                 tiles[row][col] = tile; //store a reference
                 add(tile); // add to the gui
             }

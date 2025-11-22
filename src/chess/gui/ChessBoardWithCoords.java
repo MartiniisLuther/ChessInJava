@@ -16,12 +16,14 @@ public class ChessBoardWithCoords extends JPanel {
     private static final String[] FILES = {"A", "B", "C", "D", "E", "F", "G", "H"};
     private static final String[] RANKS = {"8", "7", "6", "5", "4", "3", "2", "1"};
 
+    private BoardPanel boardPanel;
+
     // Constructor
     public ChessBoardWithCoords() {
         setLayout(new BorderLayout());
 
         // Core chessboard panel
-        BoardPanel board = new BoardPanel();
+        boardPanel = new BoardPanel();
 
         // Add rank labels (left and right)
         add(createRankLabelsPanel(), BorderLayout.WEST);
@@ -32,7 +34,7 @@ public class ChessBoardWithCoords extends JPanel {
         add(createFileLabelsPanel(), BorderLayout.SOUTH);
 
         // Add the chessboard at the center
-        add(board, BorderLayout.CENTER);
+        add(boardPanel, BorderLayout.CENTER);
     }
 
     // Create rank labels (1-8)
@@ -55,6 +57,11 @@ public class ChessBoardWithCoords extends JPanel {
             panel.add(label);
         }
         return panel;
+    }
+
+    // getter
+    public BoardPanel getBoardPanel() {
+        return boardPanel;
     }
     
 }
