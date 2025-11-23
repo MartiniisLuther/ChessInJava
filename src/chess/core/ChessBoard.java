@@ -138,5 +138,16 @@ public class ChessBoard {
         return sBuffer.toString();
     }
 
+    // Store turns - who plays next
+    private Color currentTurn = Color.WHITE;
+    public Color getCurrentTurn() {
+        return currentTurn;
+    }
+
+    // switch turns
+    public void switchTurn() {
+        currentTurn = (currentTurn == Color.WHITE) ? Color.BLACK : Color.WHITE;
+    }
+
 
 }

@@ -34,6 +34,7 @@ public class ChessGUI {
 	private static List<chess.core.Position> highlightedSquares = new ArrayList<>();
 	private static ChessBoard modelBoard = new ChessBoard();
 	private static BoardPanel boardPanelReference;
+	private static SidePanel sidePanelReference;
 
 
 	// main method
@@ -58,12 +59,12 @@ public class ChessGUI {
 		// Create and add the chessboard panel
 		ChessBoardWithCoords boardWithCoords = new ChessBoardWithCoords();
 		boardPanelReference = boardWithCoords.getBoardPanel();
-		SidePanel sidePanel = new SidePanel();
+		sidePanelReference = new SidePanel();
 
 		// Layout setup
 		frame.setLayout(new BorderLayout());
 		frame.add(boardWithCoords, BorderLayout.CENTER);
-		frame.add(sidePanel, BorderLayout.EAST);
+		frame.add(sidePanelReference, BorderLayout.EAST);
 		
 		// Center the window on screen
 		frame.setLocationRelativeTo(null);
@@ -92,6 +93,10 @@ public class ChessGUI {
 		} else {
 			if (highlightedSquares.contains(pos)) {
 				modelBoard.movePiece(selectedTile, pos);
+				modelBoard.switchTurn();
+				if (sidePanelReference != null) {
+					sidePanelReference.updateTurn(modelBoard.getCurrentTurn());
+				}
 			}
 			selectedPiece = null;
 			selectedTile = null;

@@ -81,7 +81,7 @@ public class TilePanel extends JPanel {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-        if (chess.gui.ChessGUI.isHighlighted(tilePosition)) {
+        if (ChessGUI.isHighlighted(tilePosition)) {
             g.setColor(new Color(255, 255, 0, 120));
             g.fillRect(0, 0, getWidth(), getHeight());
         }
