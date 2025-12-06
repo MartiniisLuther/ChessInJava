@@ -1,27 +1,33 @@
 package chess.core;
 
 /**
- * Represents the two possible sides in a chess game.
- * 
- * This enum is minimal - only to different btn black & white, hence the 
- * enum ensures type-safety snd avoids bugs from strings or booleans.
- * 
- * Future extensions:
- *  -Add a helper method e.g. opposite()
+ * Represents the side (White or Black).
+ * Contains logic for turn switching and pawn movement direction.
 */
 
 public enum Color {
-    WHITE,
-    BLACK;
+    WHITE(-1), // Moves "up" the array (indices -> 0)
+    BLACK(1); // Moves "down" the array (indices -> 7)
+
+    public final int direction;
+
+    // Constructor
+    Color(int direction) {
+        this.direction = direction;
+    }
 
     /**
-     * Returns the opposite color.
-     * Useful for toggling turns.
-     * 
-     * @return Black if White; White if Black.
+     * @return The opposite color.
     */
     public Color opposite() {
         return this == WHITE ? BLACK : WHITE;
+    }
+
+    /**
+     * @return -1 for SHITE (moving up rows), 1 for BLACK (moiving down rows).
+     */
+    public int getDirection() {
+        return direction;
     }
     
 }

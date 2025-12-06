@@ -1,20 +1,31 @@
 package chess.core;
 
 /**
- * Represents the different types of chess pieces.
- * 
- * This enum allows for database to refer to each piece type safely - avoiding
- * errors from arbitrary strings or integers.
- * 
- * Future extensions:
- * - Add piece-specific metadat e.g. starting value for evaluation
+ * Enumeration of the chess piece types.
+ * Includes standard point values and short identifiers.
  */
-
 public enum PieceType {
-    KING,
-    QUEEN,
-    ROOK,
-    BISHOP,
-    KNIGHT,
-    PAWN;
+    KING("K", 1000),    // King value is arbitrary/infinite
+    QUEEN("Q", 9),
+    ROOK("R", 5),
+    BISHOP("B", 3),
+    KNIGHT("N", 3),     // Standard notation uses 'N' for knight
+    PAWN("P", 1);
+
+    private final String shortName;
+    private final int value;
+
+    // Constructor
+    PieceType(String shortName, int value) {
+        this.shortName = shortName;
+        this.value = value;
+    }
+
+    public String getShortName() {
+        return shortName;
+    }
+
+    public int getValue() {
+        return value;
+    }
 }
