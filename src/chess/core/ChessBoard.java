@@ -78,9 +78,9 @@ public class ChessBoard {
     }
 
     /**
-     * Retrieves the piece at a given position
+     * Retrieves the piece at a given position.
      * 
-     * @param pos a valid Position object.
+     * @param pos a valid Position object
      * @return the piece located there, or null if empty
     */
     public Piece getPiece(Position pos) {
@@ -104,8 +104,9 @@ public class ChessBoard {
     /** 
      * Moves a piece from source to destination.
      * No legality checking performed here yet.
-     * @param from - the piece's current posn.
-     * @param to - the desired target position. 
+     * 
+     * @param from the piece's current posn
+     * @param to the desired target position
     */
     public void movePiece(Position from, Position to) {
         Piece piece = getPiece(from);
@@ -119,34 +120,39 @@ public class ChessBoard {
     }
 
     /**
-     * @return true - if a square has a piece.
+     * @return true if a square has a piece
      */
     public boolean isOccupied(Position pos) {
         return getPiece(pos) != null;
     }
 
+    /**
+     * Returns a human-readable representation of the chess board with row indices.
+     * Each square is shown as "--" for empty or the first character of the piece type followed by a space (e.g. "K ").
+     * @return formatted multi-line string showing rows 0–7 and their contents
+     */
     @Override
     public String toString() {
-        StringBuffer sBuffer = new StringBuffer("ChessBoard:\n");
+        StringBuilder sBuilder = new StringBuilder("ChessBoard:\n");
         for (int row = 0; row < 8; row++) {
-            sBuffer.append(row).append(": ");
+            sBuilder.append(row).append(": ");
             for (int col = 0; col < 8; col++) {
-                sBuffer.append(board[row][col] == null ? "-- " : board[row][col].getType().toString().charAt(0) + " ");
+                sBuilder.append(board[row][col] == null ? "-- " : board[row][col].getType().toString().charAt(0) + " ");
             }
-            sBuffer.append("\n");
+            sBuilder.append("\n");
         }
-        return sBuffer.toString();
+        return sBuilder.toString();
     }
 
     // Store turns - who plays next
-    private Color currentTurn = Color.WHITE;
-    public Color getCurrentTurn() {
+    private chess.core.Color currentTurn = chess.core.Color.WHITE;
+    public chess.core.Color getCurrentTurn() {
         return currentTurn;
     }
 
     // switch turns
     public void switchTurn() {
-        currentTurn = (currentTurn == Color.WHITE) ? Color.BLACK : Color.WHITE;
+        currentTurn = (currentTurn == chess.core.Color.WHITE) ? chess.core.Color.BLACK : chess.core.Color.WHITE;
     }
 
 

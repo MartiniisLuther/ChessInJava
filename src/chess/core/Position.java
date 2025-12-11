@@ -18,7 +18,8 @@ public final class Position {
     private final int col;
 
     /**
-     * Creates a new position using 0-based array indices.     * 
+     * Creates a new position using 0-based array indices.
+     * 
      * @param row 0 to 7
      * @param col 0 to 7
      * @throws IllegalArgumentException if row or col are out of bounds

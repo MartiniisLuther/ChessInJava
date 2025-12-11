@@ -58,13 +58,13 @@ public abstract class Piece {
     }
 
     /**
-     * Crucial Shared logic:** Calculatesand adds all valid moves
-     * for sliding pieces (Rok, Bishop, Queen) in the give directions.
+     * Crucial Shared logic:** Calculates and adds all valid moves
+     * for sliding pieces (Rook, Bishop, Queen) in the given directions.
      * <p>
      * This method handles board boundaries, piece blocking, and capture logic.
      * 
      * @param board The current game board state.
-     * @param moves The list to populate with calculated postions.
+     * @param moves The list to populate with calculated positions.
      * @param directions 2D array of {row_offset, col_offset} defining slide path.
      */
     protected void addSlidingMoves(ChessBoard board, List<Position> moves, int[][] directions){
