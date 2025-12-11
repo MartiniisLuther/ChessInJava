@@ -5,17 +5,11 @@ import java.util.List;
 
 /**
  * Represents a Pawn chess Piece.
- * 
- * Pawn rules implemented here:
- * - move 1 square forward if empty
- * - move 2 squares forward on first move if both squares are empty
- * - capture diagonally one square
- * 
- * Not handled here:
- * - en passant
- * - promotion
+ * <p>
+ * Implements basic pawn movement: 1-square forward, 2-square initial move, and  1-square diagonal capture.
+ * <p>
+ * NOT handled: en passant and promotion.
  */
-
 public class Pawn extends Piece {
 
     // Constructor
@@ -30,50 +24,57 @@ public class Pawn extends Piece {
         int row = position.getRow();
         int col = position.getCol();
 
-        // White moves upward (towards row 0), black downward
-        int direction = (this.color == Color.WHITE) ? -1 : 1;
+        // The direction pawns move depends on their color (-1 for white, +1 for black)
+        int direction = this.color.getDirection();
 
+        // ------------------------------------------------------------
+        // ---- FORWARD MOVEMENT (Non-capture) ------------------------
+        // ------------------------------------------------------------
+        
         int oneStepRow = row + direction;
-        int twoStepRow = row + 2 * direction;
+        Position oneStepPos = new Position(oneStepRow, col);
 
-        // ---- Single forward step -----
-        if (isInsideBoard(oneStepRow, col) && board.getPiece(new Position(oneStepRow, col)) == null) {
+        // Check 1: Single forward step
+        if (Position.isValid(oneStepRow, col) && !board.isOccupied(oneStepPos)) {
+            moves.add(oneStepPos);
 
-            moves.add(new Position(oneStepRow, col));
+            // Check 2: Double forward step (only if on starting rank AND single step is empty)
+            if (!this.hasMoved) {
+                int twoStepRow = row + 2 * direction;
+                Position twoStepPos = new Position(twoStepRow, col);
 
-            // ---- Double step; only if unmoved && single step empty ----
-            if (!this.hasMoved && isInsideBoard(twoStepRow, col) 
-                && board.getPiece(new Position(twoStepRow, col)) == null) {
-                    
-                moves.add(new Position(twoStepRow, col));
+                if (Position.isValid(twoStepRow, col) && !board.isOccupied(twoStepPos)) {
+                    moves.add(twoStepPos);
+                }
             }
         }
 
-        // ------ Diagonal captures -----
-        // left capture
-        int leftCol = col - 1;
-        if (isInsideBoard(oneStepRow, leftCol)) {
-            Piece target = board.getPiece(new Position(oneStepRow, leftCol));
-            if (target != null && target.getColor() != this.color) {
-                moves.add(new Position(oneStepRow, leftCol));
-            }
-        }
+        // ------------------------------------------------------------
+        // ---- DIAGONAL CAPTURES -------------------------------------
+        // ------------------------------------------------------------
 
-        // right capture
-        int rightCol = col + 1;
-        if (isInsideBoard(oneStepRow, rightCol)) {
-            Piece target = board.getPiece(new Position(oneStepRow, leftCol));
-            if (target != null && target.getColor() != this.color) {
-                moves.add(new Position(oneStepRow, rightCol));
+        // Ca[ture offsets: left and right relative to pawn's forward direction
+        int[][] captureOffsets = {
+            {direction, -1}, // diagonal left
+            {direction, 1}   // diagonal right
+        };
+
+        // Check each diagonal capture possibility
+        for (int[] offset : captureOffsets) {
+            int targetRow = row + offset[0];
+            int targetCol = col + offset[1];
+
+            if (Position.isValid(targetRow, targetCol)) {
+                Position targetPos = new Position(targetRow, targetCol);
+                Piece target = board.getPiece(targetPos);
+
+                // A diagonal move is legal ONLY if it is a capture
+                if (isOpponent(target)) {
+                    moves.add(targetPos);
+                }
             }
         }
 
         return moves;
     }
-
-    // helper for hounds checking
-    private boolean isInsideBoard(int r, int c) {
-        return r >= 0 && r <= 7 && c >= 0 && c <= 7;
-    }
-    
 }

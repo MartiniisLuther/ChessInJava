@@ -5,13 +5,9 @@ import java.util.List;
 
 /**
  * Represents a Bishop chess piece.
- * 
- * Bishops move diagonally any number of squares until blocked.
- * They can't jump over pieces.
- * 
- * This class implements only mov't generation.
+ * <p>
+ * Bishops moove diagonally any number of squares until blocked.
  */
-
 public class Bishop extends Piece {
     
     // Diagonal direction offsets: NW, NE, SW, SE
@@ -30,35 +26,10 @@ public class Bishop extends Piece {
     @Override
     public List<Position> getLegalMoves(ChessBoard board) {
         List<Position> moves = new ArrayList<>();
-        int row = position.getRow();
-        int col = position.getCol();
 
-        // For each diagonal direction
-        for (int[] dir : DIRECTIONS) {
-            int dRow = dir[0];
-            int dCol = dir[1];
-
-            int newRow = row + dRow;
-            int newCol = col + dCol;
-
-            // Slide until edge or piece collision
-            while (newRow >= 0 && newRow <= 7 && newCol >= 0 && newCol <= 7) {
-                Position newPos = new Position(newRow, newCol);
-                Piece target = board.getPiece(newPos);
-
-                if (target == null) {
-                    moves.add(newPos); // empty sqaure
-                } else {
-                    if (target.getColor() != this.color) {
-                        moves.add(newPos); // capture
-                    }
-                    break; // stop sliding when any piece is hit
-                }
-
-                newRow += dRow;
-                newCol += dCol;
-            }
-        }
+        // use the utility method defined in abstract Piece class
+        addSlidingMoves(board, moves, DIRECTIONS);
+        
         return moves;
     }
 }
