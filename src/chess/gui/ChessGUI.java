@@ -9,20 +9,9 @@ import java.util.List;
 import javax.swing.*;
 
 /**
- * The ChessGUI class is the main entry point for the Chess game.
- * It initializes the main game window (JFrame) and sets up the graphical 
- * board layout.
- * 
- * Responsibilities:
- * - Create & configure the main application window.
- * - Initiate & display the chessboard panel.
- * - Handle basic window settings ~ size, layout
- * 
- * Future improvements: 
- * - Add menus (e.g. Restart, Undo, Help).
- * - Connect GUI to game logic
+ * Main GUI class for the Chess game.
+ * Initializes the game window, chessboard panel, and handles tile clicks.
  */
-
 public class ChessGUI {
 	
 	// Window dimensions 
@@ -71,36 +60,45 @@ public class ChessGUI {
 		frame.setVisible(true);
 	}
 
-	/** Handle tile click: 
-	 * - select a piece or move selected piece if pos is a legal move; 
-	 * - updates selection/highlightedSquares
-	 * - and may call modelBoard.movePiece(...). 
-	 * 
-	 * @param pos clicked tile (non-null) 
+	/**
+	 * Handles tile clicks. Selects pieces and executes moves if valid.
+	 * @param pos the clicked board position
 	 */
 	public static void handleTileClicked(Position pos) {
 		Piece piece = modelBoard.getPiece(pos);
 
+		// CASE 1: No piece currently selected
 		if (selectedPiece == null) {
-			if (piece != null) {
+			// Only select if it's the piece's turn
+			if (piece != null && piece.getColor() == modelBoard.getCurrentTurn()) {
 				selectedPiece = piece;
 				selectedTile = pos;
+				// Highlight legal moves for the selected piece
 				highlightedSquares = piece.getLegalMoves(modelBoard);
+				
 				if (boardPanelReference != null) {
 					boardPanelReference.refreshBoard();
 				}
 			}
-		} else {
+		}
+		// CASE 2: A piece is already selected
+		else {
 			if (highlightedSquares.contains(pos)) {
+				// Valid move - execute it
 				modelBoard.movePiece(selectedTile, pos);
 				modelBoard.switchTurn();
+
 				if (sidePanelReference != null) {
 					sidePanelReference.updateTurn(modelBoard.getCurrentTurn());
 				}
 			}
+
+			// Deselect regardless if whether move was successful
 			selectedPiece = null;
 			selectedTile = null;
 			highlightedSquares.clear();
+
+			// Refresh the board display
 			if (boardPanelReference != null) {
 				boardPanelReference.refreshBoard();
 			}
@@ -109,11 +107,9 @@ public class ChessGUI {
 
 
 	/**
-	 * Checks whether a specific board position is currently highlighted in the GUI.
-	 * Queries the internal highlightedSquares collection to determine if the given position is marked.
-	 *
-	 * @param pos the board Position to check for highlighting
-	 * @return true if the specified position is highlighted, false otherwise
+	 * Checks if a position is highlighted.
+	 * @param pos the board position to check
+	 * @return true if highlighted, false otherwise
 	 */
 	public static boolean isHighlighted(Position pos) {
 		return highlightedSquares.contains(pos);
