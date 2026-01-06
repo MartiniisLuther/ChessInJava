@@ -1,7 +1,7 @@
 package chess.core;
 
+import java.util.ArrayList;
 import java.util.List;
-
 
 /**
  * The central Model class. Manages the 8x8 grid, tracks piece positions,
@@ -203,7 +203,11 @@ public class ChessBoard {
         currentTurn = currentTurn.opposite();
     }
 
-    
+    /**
+     * Generates a string representation of the board for debugging.
+     * Empty squares are represented by '.'.
+     * @return A multi-line string showing the board state.
+     */
     @Override
     public String toString() {
         StringBuilder sBuilder = new StringBuilder(" a b c d e f g h\n");
@@ -217,6 +221,53 @@ public class ChessBoard {
         }
         sBuilder.append(" a b c d e f g h\n");
         return sBuilder.toString();
+    }
+
+    /**
+     * Filters pseudo-legal moves to return only moves that are 100% legal.
+     * A move is legal only if it does not leave the player's own King in check.
+     * @param piece The piece to check moves for.
+     * @return A list of positions the piece can safely move to.
+     */
+    public List<Position> getValidMoves(Piece piece) {
+        List<Position> pseudoLegalMoves = piece.getLegalMoves(this);
+        List<Position> legalMoves = new ArrayList<>();
+
+        for (Position targetPos : pseudoLegalMoves) {
+            if (isMoveLegal(piece.getPosition(), targetPos)) {
+                legalMoves.add(targetPos);
+            }
+        }
+        return legalMoves;
+    }
+
+    /**
+     * Simulates a move to see if it would put/leave the King in check.
+     * This follows the "Try-Check-Undo" pattern.
+     * @param from The starting position of the piece.
+     * @param to The target position of the piece.
+     * @return true if the move is legal, false if it leaves the King in check
+     */
+    private boolean isMoveLegal(Position from, Position to) {
+        Piece movingPiece = getPiece(from);
+        Piece capturedPiece = getPiece(to); // Save in case we need to undo a capture
+        Color sideColor = movingPiece.getColor();
+
+        // 1. Physically simulate the move
+        board[to.getRow()][to.getCol()] = movingPiece;
+        board[from.getRow()][from.getCol()] = null;
+        Position originalPos = movingPiece.getPosition();
+        movingPiece.setPosition(to);
+
+        // 2. Check of the King is safe
+        boolean kingSafe = !isKingInCheck(sideColor);
+
+        // 3. Undo the move (restore state)
+        board[from.getRow()][from.getCol()] = movingPiece;
+        board[to.getRow()][to.getCol()] = capturedPiece;
+        movingPiece.setPosition(originalPos);
+        
+        return kingSafe;
     }
 
 }
